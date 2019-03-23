@@ -175,6 +175,13 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Core Service Providers ...
+         */
+        Packages\Core\Sources\Providers\AppServiceProvider::class,
+        Packages\Core\Sources\Providers\RouteServiceProvider::class,
+//        Packages\Core\Sources\Providers\ThemeServiceProvider::class,
+
         Barryvdh\Debugbar\ServiceProvider::class,
     ],
 

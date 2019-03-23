@@ -50,7 +50,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-        dd('ad');
     }
 
     /**
@@ -149,7 +148,6 @@ class RouteServiceProvider extends ServiceProvider
 
         // Validate client route file
         if(file_exists($clientRouteFile)) {
-            dd($clientRouteFile);
             $this->registerRouteWithMiddleware($route, $moduleName, $middlewareClass, $this->namespaceClient, $controllerNamespace, $defaultRouteFile, $clientRouteFile);
         }
 

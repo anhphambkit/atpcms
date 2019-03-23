@@ -11,6 +11,6 @@
  *                  ROUTE FOR DYNAMIC PORTAL MODULE
  *
  *********************************************************/
-Route::domain('{subDomain}.{mainDomain}')->group(function () {
-
+Route::get('/backend/test', function () {
+    return "admin";
 });

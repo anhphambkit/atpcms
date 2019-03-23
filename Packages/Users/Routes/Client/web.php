@@ -11,6 +11,6 @@
  *                  ROUTE FOR DYNAMIC PORTAL MODULE
  *
  *********************************************************/
-Route::get('/', function () {
+Route::get('/test', function () {
     return view('welcome');
 });

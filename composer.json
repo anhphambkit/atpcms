@@ -37,8 +37,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Packages\\Core\\Sources\\": "Packages/Core/Sources",
-            "Packages\\Users\\Sources\\": "Packages/Users/Sources"
+            "Packages\\Core\\Sources\\": "Packages/Core/Sources/",
+            "Packages\\Users\\Sources\\": "Packages/Users/Sources/"
         },
         "classmap": [
             "database/seeds",
