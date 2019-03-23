@@ -1,0 +1,31 @@
+import StringUtil from '@theme/util/string-util';
+import Form from '@theme/inc/form';
+import message from '@theme/config/message';
+import JSLib from '@theme/inc/js-lib';
+
+let {model}Form = new Form();
+
+// FORM
+{model}Form.wrapper = '#{model}-form';
+{model}Form.url = updateMode ? api.{model}.update : api.{model}.create;
+
+{model}Form.beforeSubmit = () => {
+};
+{model}Form.afterDone = (data) => {
+    let successMess = (new JSLib).format(message.CREATED_SUCCESS, ['{model}']);
+    if(updateMode){
+        successMess = (new JSLib).format(message.UPDATE_SUCCESS, ['{model}']);
+    }
+    toastr.success(successMess);
+};
+
+{model}Form.afterCancel = (data) => {
+};
+
+// Handle event on form
+{model}Form.handleSubmit();
+// END FORM
+
+// Register Event
+$(document).ready(function(){
+});

@@ -1,0 +1,20 @@
+<?php
+
+namespace Packages\{c package}\Controllers\Ajax;
+use Illuminate\Routing\Controller;
+use Packages\{c package}\Sources\Services\{c package}Services;
+
+class {c model}Controller extends Controller
+{
+
+    /**
+     * Instance of Eloquent{c package}Service
+     * @var {c package}Services
+     */
+    protected ${l package}Services;
+
+    public function __construct({c package}Services ${l package}Services)
+    {
+        $this->{l package}Services = ${l package}Services;
+    }
+}

@@ -1,0 +1,19 @@
+<?php
+namespace Packages\{c package}\Controllers\Ajax;
+
+use Packages\Core\Controllers\CoreAjaxController;
+use Packages\{c package}\Sources\Services\{c package}Services;
+
+class AjaxController extends CoreAjaxController
+{
+    /**
+     * @var {c package}Services
+     */
+    protected ${package}Services;
+
+    public function __construct({c package}Services ${package}Services)
+    {
+        $this->{package}Services = ${package}Services;
+    }
+
+}

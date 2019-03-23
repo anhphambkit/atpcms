@@ -1,0 +1,38 @@
+<?php
+
+namespace Packages\{c package}\Sidebar;
+use Maatwebsite\Sidebar\Group;
+use Maatwebsite\Sidebar\Item;
+use Maatwebsite\Sidebar\Menu;
+use Maatwebsite\Sidebar\SidebarExtender as SidebarExtenderCore;
+use Packages\{c package}\Permissions\Permission;
+use Packages\User\Sources\Services\RoleServices;
+
+class SidebarExtender implements SidebarExtenderCore {
+
+    /**
+     * @var RoleServices
+     */
+    protected $roleServices;
+
+    public function __construct(){
+        $this->roleServices = app()->make(RoleServices::class);
+    }
+
+    /**
+     * Attach menu item to Admin console sidebar
+     * @param Menu $menu
+     * @return Menu
+     */
+    public function extendWith(Menu $menu) {
+        $menu->group('Setting', function (Group $group) {
+            $group->hideHeading(true);
+            $group->item(trans('{l package}::{l package}.package'), function (Item $item) {
+                $item->icon('icon-user');
+                $item->authorize($this->roleServices->hasAccess(Permission::{u package}_ACCESS));
+                $item->route('{l package}.index');
+            });
+        });
+        return $menu;
+    }
+}

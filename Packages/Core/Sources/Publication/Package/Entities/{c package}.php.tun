@@ -1,0 +1,13 @@
+<?php
+namespace Packages\{c package}\Entities;
+use Illuminate\Database\Eloquent\Model;
+
+class {c package} extends Model
+{
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [];
+}

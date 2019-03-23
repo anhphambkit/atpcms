@@ -1,0 +1,17 @@
+<?php
+namespace Packages\{c package}\Services\Eloquent;
+use Packages\Core\Traits\Services\PackageServicesTrait;
+use Packages\{c package}\Entities\{c package};
+use Packages\{c package}\Sources\Repositories\{c package}Repositories;
+use Packages\{c package}\Services\{c package}Services;
+
+class Eloquent{c package}Services implements {c package}Services {
+    use PackageServicesTrait;
+
+    protected $repositories;
+    public function __construct({c package}Repositories $repositories)
+    {
+        $this->repositories = $repositories;
+        $this->repositories->setModel(new {c package}());
+    }
+}

@@ -1,0 +1,14 @@
+<?php
+namespace Packages\{c package}\Requests;
+
+use Packages\Core\Requests\CoreFormRequest;
+
+class {c model}Request extends CoreFormRequest
+{
+    public function rules()
+    {
+        return [
+            'id'  => 'required',
+        ];
+    }
+}

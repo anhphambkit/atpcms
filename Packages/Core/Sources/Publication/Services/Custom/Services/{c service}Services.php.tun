@@ -1,0 +1,6 @@
+<?php
+namespace Packages\{c package}\Sources\Services;
+use Packages\{c package}\Services\{c service}Services as Core{c service}Services;
+
+interface {c service}Services extends Core{c service}Services  {
+}

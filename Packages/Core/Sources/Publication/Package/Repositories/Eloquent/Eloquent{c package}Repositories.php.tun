@@ -1,0 +1,11 @@
+<?php
+namespace Packages\{c package}\Repositories\Eloquent;
+
+
+use Packages\Core\Traits\Repositories\PackageRepositoriesTrait;
+use Packages\{c package}\Repositories\{c package}Repositories;
+
+class Eloquent{c package}Repositories implements {c package}Repositories
+{
+    use PackageRepositoriesTrait;
+}

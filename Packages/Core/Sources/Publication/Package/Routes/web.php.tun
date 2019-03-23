@@ -1,0 +1,9 @@
+<?php
+use \Packages\Core\Sources\Middleware\PermissionMiddleware;
+use \Packages\{c package}\Permissions\Permission;
+/*
+| Define your awesome routing
+*/
+Route::middleware('auth')->prefix(config('eden')['backend_prefix_route']. '/{l package}')->group(function () {
+    Route::get('/', 'WebController@index')->name('{l package}.index')->middleware(PermissionMiddleware::class. ':'. Permission::{u package}_ACCESS);
+});

@@ -1,0 +1,11 @@
+<?php
+namespace Packages\{c package}\Permissions;
+
+interface Permission
+{
+    // Access {u package}
+    const {u package}_ACCESS = '{u package}_ACCESS';
+    const {u package}_CREATE = '{u package}_CREATE';
+    const {u package}_EDIT = '{u package}_EDIT';
+    const {u package}_DELETE = '{u package}_DELETE';
+}

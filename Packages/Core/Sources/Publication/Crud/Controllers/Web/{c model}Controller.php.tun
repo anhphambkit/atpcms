@@ -1,0 +1,46 @@
+<?php
+
+namespace Packages\{c package}\Controllers\Web;
+use Illuminate\Routing\Controller;
+use Packages\{c package}\Sources\Services\{c model}Services;
+
+class {c model}Controller extends Controller
+{
+
+    /**
+     * Instance of Eloquent{c model}Service
+     * @var {c model}Services
+     */
+    private ${model}Service;
+
+    public function __construct({c model}Services ${model}Service)
+    {
+        $this->{model}Service = ${model}Service;
+    }
+
+    /**
+     * Index of {c model}
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(){
+        ${model}s = $this->{model}Service->all();
+        return view('{package}::{model}.list',compact('{model}s'));
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create(){
+        return view('{package}::{model}.crud');
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id){
+        ${model} = $this->{model}Service->get($id);
+        return view('{package}::{model}.crud', compact('{model}'));
+    }
+
+}

@@ -1,0 +1,8 @@
+<?php
+namespace Packages\{c package}\Sources\Services\Eloquent;
+use Packages\{c package}\Sources\Services\{c service}Services;
+
+class Eloquent{c service}Services extends \Packages\{c package}\Services\Eloquent\Eloquent{c service}Services implements {c service}Services
+{
+
+}

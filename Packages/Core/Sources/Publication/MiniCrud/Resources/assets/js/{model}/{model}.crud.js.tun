@@ -1,0 +1,117 @@
+import StringUtil from '@theme/util/string-util';
+import Form from '@theme/inc/form';
+import message from '@theme/config/message';
+import JSLib from '@theme/inc/js-lib';
+import axios from 'axios';
+
+let {model}Form = new Form();
+let {model}NameCtrl = $('#{model}-name');
+let {model}SlugCtrl = $('#{model}-slug');
+let {model}ParentCtrl = $('#parent-{model}');
+let submitCtrl = $('#submit-{model}');
+let tbl{c model} = $('#tbl-{model}');
+
+{model}Form.wrapper = '#{model}-form';
+    {model}Form.url = api.{model}.create;
+        {model}Form.restoreWhenCancel = false;
+// Trigger change all controls on the form
+            {model}Form.updateUI = () => {
+                {model}NameCtrl.trigger('change');
+                    {model}SlugCtrl.trigger('change');
+                        {model}ParentCtrl.trigger('change');
+};
+                        {model}Form.beforeSubmit = () => {
+    if(updateMode){
+        {model}Form.url = api.{model}.update + '/' + updateId;
+    } else {
+            {model}Form.url = api.{model}.create;
+    }
+    if({model}Form.data.parent_id == 0 || {model}Form.data.parent_id === '0'){
+        {model}Form.data.parent_id = undefined;
+    }
+};
+{model}Form.afterDone = (data) => {
+    let successMess = (new JSLib).format(message.CREATED_SUCCESS, ['{c model}']);
+    if(updateMode){
+        successMess = (new JSLib).format(message.UPDATE_SUCCESS, ['{c model}']);
+    }
+    toastr.success(successMess);
+    window.location.reload();
+};
+{model}Form.afterCancel = (data) => {
+    {model}NameCtrl.val('');
+        {model}SlugCtrl.val('');
+            {model}Form.updateUI();
+};
+// Handle event on form
+            {model}Form.handleSubmit();
+                {model}Form.handleCancel();
+
+
+$(document).ready(function(){
+    $('select').select2({
+        dropdownParent: $('#{model}-form')
+    });
+
+    tbl{c model}.DataTable();
+
+    // // Register Event Handler for {c model} Name (Add/Edit)
+    // {model}NameCtrl.on('change', function(){
+    //     // auto generate slug after {model} name change
+    //     let val = $(this).val();
+    //     if(val.trim().length > 0){
+    //         let stringUtil = new StringUtil();
+    //         {model}SlugCtrl.val(stringUtil.generateSlug(val));
+    //     }
+    // });
+});
+
+// Handle update form
+window.updateMode = false;
+window.updateId = null;
+window.edit{c model} = (id) => {
+    window.updateMode = true;
+    window.updateId = id;
+    submitCtrl.text(text.update);
+    axios.get(api.{model}.get + '/' + id)
+        .then(response => {
+            let {model} = response.data.data;
+        {model}NameCtrl.val({model}.name);
+            {model}SlugCtrl.val({model}.slug);
+                {model}ParentCtrl.val({model}.parent_id == null ? 0 : {model}.parent_id);
+                    {model}Form.updateUI();
+            Custombox.open({
+                effect: 'blur',
+                target: '#{model}-modal'
+            });
+        })
+        .catch(function(data){
+
+        });
+};
+
+window.new{c model} = () => {
+    window.updateMode = false;
+    window.updateId = null;
+    submitCtrl.text(text.add);
+};
+
+window.delete{c model} = (id, name) => {
+    swal({
+        title: (new JSLib).format(text.deleteTitle, [name]),
+        text: text.deleteContent,
+        type:"warning",
+        showCancelButton:true,
+        confirmButtonClass:"btn btn-confirm mt-2",
+        cancelButtonClass:"btn btn-cancel ml-2 mt-2",
+        confirmButtonText: text.deleteBtn
+    })
+        .then(function() {
+            axios.delete(api.{model}.delete, { params: { id }}).then( () => {
+                swal("Completed", (new JSLib).format(message.DELETED_SUCCESS, ['{c model}']), "success");
+                location.reload();
+            });
+        }).catch(function(){});
+};
+
+

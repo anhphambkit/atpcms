@@ -1,0 +1,119 @@
+@extends('theme::layouts.admin')
+@section('styles')
+    <link href="{{ asset('packages/theme/vendors/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('packages/theme/vendors/css/custombox.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('packages/theme/vendors/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('packages/theme/vendors/css/sweet-alert/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
+@endsection
+@section('content')
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                @component('theme::components.cardbox')
+                @slot('title', trans('theme::theme.name'))
+                @slot('notForm', true)
+                @slot('content')
+                    <p class="text-muted font-14 m-b-20">trans('theme::theme.desc')...</p>
+                    <?php $rows = []; $cols = ['ID', 'Name', 'Updated', 'Action']; ?>
+                    @foreach(${model}s as $i => ${model})
+                        <?php
+                        $rows[$i]['cells'][0]['value'] = '#'. ${model}->getKey();
+                        $rows[$i]['cells'][1]['value'] = ${model}->name;
+                        $rows[$i]['cells'][2]['value'] = ${model}->updated_at;
+                        ob_start();
+                        ?>
+                        @component('theme::components.dropdown')
+                        @slot('id', 'dropdown-action-'. ${model}->name)
+                        <?php $options = [
+                                ['label'    => '<i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i> '. trans('theme::theme.action.edit'), 'link'   => '#', 'onclick'    => 'edit{c model}('. ${model}->getKey(). ');return false;'],
+                                ['label'    => '<i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i> '. trans('theme::theme.action.remove'), 'link'   => '#', 'onclick'    => 'delete{c model}('. ${model}->getKey(). ', \''. ${model}->name. '\');return false;'],
+                        ]; ?>
+                        @slot('options', $options)
+                        @slot('label', trans('theme::theme.actions'))
+                        @endcomponent
+                        <?php $rows[$i]['cells'][3]['value'] = ob_get_clean(); ?>
+                    @endforeach
+                    @component('theme::components.layouts.list')
+                        @slot('model', '{model}')
+                        @slot('rows', $rows)
+                        @slot('cols', $cols)
+                        @slot('btnNew')
+                            @component('theme::components.button')
+                            @slot('label', '<i class="fi fi-file-add"></i> '. trans('theme::theme.action.add'). ' '. trans('{package}::{package}.{model}'))
+                            @slot('id', 'new-{model}-btn')
+                            @slot('attributes', ['data-animation'   => 'contentscale', 'data-plugin'    => 'custommodal', 'href' => '#{model}-modal', 'data-overlaySpeed' => 10, 'data-overlaycolor'   => '#36404a', 'onclick' => 'new{c model}()'])
+                            @endcomponent
+                        @endslot
+                    @endcomponent
+                @endslot
+                @endcomponent
+            </div>
+        </div>
+    </div>
+    @component('theme::components.modal')
+    @slot('title', trans('theme::theme.action.add'). ' '. trans('{package}::{package}.{model}'))
+    @slot('id', '{model}-modal')
+    @slot('content')
+    <form class="form-horizontal" action="#" id="{model}-form">
+        <p class="text-muted font-14 m-b-20">
+            {{ trans('theme::theme.desc') }}
+        </p>
+        <div class="form-group row">
+            <div class="col-md-12">
+                @component('theme::components.field')
+                @slot('title', trans('theme::theme.name'))
+                @slot('name', 'name')
+                @slot('class', 'active')
+                @slot('id', '{model}-name')
+                @slot('required', true)
+                @slot('value', '')
+                @endcomponent
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-12 text-right">
+                @component('theme::components.button')
+                @slot('id', 'submit-{model}')
+                @slot('control', 'submit')
+                @slot('label', trans('theme::theme.action.add'))
+                @endcomponent
+
+                @component('theme::components.button')
+                @slot('id', 'cancel-{model}')
+                @slot('label', trans('theme::theme.action.cancel'))
+                @slot('control', 'cancel')
+                @slot('attributes', ['onclick' => 'Custombox.close();'])
+                @endcomponent
+            </div>
+        </div>
+    </form>
+    @endslot
+    @endcomponent
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('packages/theme/vendors/js/select2.min.js')}}"></script>
+    <script src="{{ asset('packages/theme/vendors/js/custombox.min.js')}}"></script>
+    <script src="{{ asset('packages/theme/vendors/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('packages/theme/vendors/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('packages/theme/vendors/js/sweet-alert/sweetalert2.min.js') }}"></script>
+    <script>
+        let api = {
+        {model}: {
+                create: '{{ route('{package}.{model}.create') }}',
+                get: '{{ route('{package}.{model}.get', '') }}',
+                update: '{{ route('{package}.{model}.update', '') }}',
+                delete: '{{ route('{package}.{model}.delete') }}',
+            }
+        };
+
+        let text = {
+            add: '{{trans('theme::theme.action.add')}}',
+            update: '{{trans('theme::theme.action.update')}}',
+            deleteTitle: "{{ trans('{package}::{package}.confirm-delete-msg') }}",
+            deleteContent: "{{ trans('{package}::{package}.confirm-delete-warn-msg') }}",
+            deleteBtn: "{{ trans('{package}::{package}.yes-confirm-delete-btn') }}",
+        };
+    </script>
+    <script src="{{ asset('packages/{package}/assets/js/{model}.crud.js')}}"></script>
+@endsection

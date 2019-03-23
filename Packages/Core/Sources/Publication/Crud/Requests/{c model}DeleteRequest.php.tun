@@ -1,0 +1,13 @@
+<?php
+namespace Packages\{c package}\Requests;
+use Packages\Core\Sources\Requests\CoreFormRequest;
+
+class {c model}DeleteRequest extends CoreFormRequest{
+
+    public function rules()
+    {
+        return [
+            'id'          => 'required|exists:{model}s,id',
+        ];
+    }
+}

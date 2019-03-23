@@ -1,0 +1,13 @@
+<?php
+namespace Packages\{c package}\Requests;
+use Packages\Core\Sources\Requests\CoreFormRequest;
+
+class {c model}UpdateRequest extends CoreFormRequest{
+
+    public function rules()
+    {
+        return [
+            'name'          => 'required|min:2',
+        ];
+    }
+}

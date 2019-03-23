@@ -1,0 +1,11 @@
+<?php
+/**
+ * The interface of {l service} services
+ */
+namespace Packages\{c package}\Services;
+
+use Packages\Core\Interfaces\ServiceInterface as CoreServiceInterface;
+
+interface {c service}Services extends CoreServiceInterface{
+
+}

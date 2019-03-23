@@ -1,0 +1,12 @@
+<?php
+use \Packages\Core\Sources\Middleware\PermissionMiddleware;
+use \Packages\{c package}\Permissions\Permission;
+
+Route::middleware('auth')->prefix(config('eden')['backend_prefix_route']. '/{package}')->group(function () {
+    // {c model} Route
+    Route::group(['prefix'=>'{model}'],function(){
+        Route::get('/','{c model}Controller@index')->name('{package}.{model}.index')->middleware(PermissionMiddleware::class. ':' .Permission::{u package}_{u model}_ACCESS);
+        Route::get('/add','{c model}Controller@create')->name('{package}.{model}.create')->middleware(PermissionMiddleware::class. ':' .Permission::{u package}_{u model}_CREATE);
+        Route::get('/edit/{id}','{c model}Controller@edit')->name('{package}.{model}.edit')->middleware(PermissionMiddleware::class. ':' .Permission::{u package}_{u model}_UPDATE);
+    });
+});

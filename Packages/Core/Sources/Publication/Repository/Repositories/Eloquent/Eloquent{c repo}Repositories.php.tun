@@ -1,0 +1,14 @@
+<?php
+/**
+ * {c repo} repository implemented
+ */
+namespace Packages\{c package}\Repositories\Eloquent;
+use Packages\{c package}\Repositories\{c repo}Repositories;
+use Packages\Core\Traits\Repositories\RepositoriesAbstract;
+
+class Eloquent{c repo}Repositories implements {c repo}Repositories {
+    use RepositoriesAbstract;
+
+    public function __construct() {
+    }
+}

@@ -1,0 +1,74 @@
+@extends('theme::layouts.admin')
+@section('styles')
+    <link href="{{ asset('packages/{package}/assets/css/{model}/{model}.css')}}" rel="stylesheet" type="text/css" />
+@endsection
+@section('content')
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                @component('theme::components.cardbox')
+                @slot('title', trans('{package}::{package}.package'))
+                @slot('isActive', true)
+                @slot('content')
+                <p class="text-muted font-14 m-b-20">...</p>
+                <form role="form" id="{model}-form">
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            @component('theme::components.field')
+                            @slot('title', 'Name')
+                            @slot('name', 'name')
+                            @slot('id', '{model}-name')
+                            @slot('required', true)
+                            @if(isset(${model}))
+                                @slot('value', ${model}->name)
+                            @else
+                                @slot('value', '')
+                            @endif
+                            @endcomponent
+                        </div>
+                    </div>
+
+                    <div class="form-group row action-group">
+                        <div class="col-12 text-right">
+                            @component('theme::components.button')
+                            @slot('id', 'submit-{model}')
+                            @slot('control', 'submit')
+                            @if(isset(${model}))
+                                @slot('label', trans('theme::theme.action.update'))
+                            @else
+                                @slot('label', trans('theme::theme.action.create'))
+                            @endif
+                            @endcomponent
+
+                            @component('theme::components.button')
+                            @slot('id', 'back-{model}')
+                            @slot('label', trans('theme::theme.back'))
+                            @endcomponent
+                        </div>
+                    </div>
+                </form>
+                @endslot
+                @endcomponent
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('plugin-scripts')
+    <script src="{{ asset('packages/theme/vendors/js/select2.min.js')}}"></script>
+@endsection
+
+@section('scripts')
+    <script>
+        let updateMode = {!! isset(${model}) ? 'true': 'false' !!};
+        let api = {
+        {model}: {
+                create: '{{ route('{package}.{model}.store') }}',
+                @if(isset(${model}))
+                update: '{{ route('{package}.{model}.update', ${model}->getKey()) }}',
+                @endif
+            }
+        }
+    </script>
+    <script src="{{ asset('packages/{package}/assets/js/{model}/{model}.crud.js')}}"></script>
+@endsection

@@ -1,0 +1,24 @@
+<?php
+namespace Packages\{c package}\Repositories\Cache;
+use Packages\Core\Cache\CacheAbstractDecorator;
+use Packages\{c package}\Repositories\{c repo}Repositories;
+
+class Cache{c repo}Repositories extends CacheAbstractDecorator implements {c repo}Repositories
+{
+    /**
+     * @var ApplicationInterface
+     */
+    protected $repository;
+
+    /**
+     * ApplicationCacheDecorator constructor.
+     * @param ApplicationInterface $repository
+     * @author TrinhLe
+     */
+    public function __construct({c repo}Repositories $repository)
+    {
+        parent::__construct();
+        $this->repository = $repository;
+        $this->entityName = 'default'; # Please setup reference name of cache.
+    }
+}

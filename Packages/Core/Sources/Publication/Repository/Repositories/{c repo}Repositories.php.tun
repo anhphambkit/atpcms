@@ -1,0 +1,7 @@
+<?php
+namespace Packages\{c package}\Repositories;
+use Packages\Core\Interfaces\RepositoryInterface;
+
+interface {c repo}Repositories extends RepositoryInterface{
+    
+}

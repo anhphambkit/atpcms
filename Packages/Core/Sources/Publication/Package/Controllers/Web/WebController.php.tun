@@ -1,0 +1,28 @@
+<?php
+
+namespace Packages\{c package}\Controllers\Web;
+use Illuminate\Routing\Controller;
+use Packages\{c package}\Sources\Services\{c package}Services;
+
+class WebController extends Controller
+{
+
+    /**
+     * Instance of Eloquent{c package}Service
+     * @var {c package}Services
+     */
+    protected ${package}Services;
+
+    public function __construct({c package}Services ${package}Services)
+    {
+        $this->{package}Services = ${package}Services;
+    }
+
+    /**
+     * Index of {c package}
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(){
+        return view('{l package}::index');
+    }
+}

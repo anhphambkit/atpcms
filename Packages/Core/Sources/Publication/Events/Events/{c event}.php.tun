@@ -1,0 +1,10 @@
+<?php
+namespace Packages\{c package}\Events;
+
+class {c event}
+{
+    public function __construct()
+    {
+
+    }
+}

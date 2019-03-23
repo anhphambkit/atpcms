@@ -1,0 +1,12 @@
+<?php
+/*
+| Define your awesome routing
+*/
+Route::middleware('auth')->group(function () {
+    /** {c model} Crud Routes */
+    Route::group(['prefix'  => '{package}/{model}'], function() {
+        Route::post('create','{c model}Controller@store')->name('{package}.{model}.store')->middleware(\Packages\Core\Sources\Middleware\PermissionMiddleware::class.':'.\Packages\{c package}\Permissions\Permission::{u package}_{u model}_CREATE);
+        Route::post('update/{id}','{c model}Controller@update')->name('{package}.{model}.update')->middleware(\Packages\Core\Sources\Middleware\PermissionMiddleware::class.':'.\Packages\{c package}\Permissions\Permission::{u package}_{u model}_UPDATE);
+        Route::delete('delete','{c model}Controller@delete')->name('{package}.{model}.destroy')->middleware(\Packages\Core\Sources\Middleware\PermissionMiddleware::class.':'.\Packages\{c package}\Permissions\Permission::{u package}_{u model}_DELETE);
+    });
+});

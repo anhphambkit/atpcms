@@ -1,0 +1,53 @@
+<?php
+namespace Packages\{c package}\Controllers\Ajax;
+use Packages\Core\Sources\Controllers\CoreAjaxController;
+
+use Packages\{c package}\Sources\Services\{c model}Services;
+use Packages\{c package}\Requests\{c model}CreateRequest;
+use Packages\{c package}\Requests\{c model}UpdateRequest;
+use Packages\{c package}\Requests\{c model}DeleteRequest;
+
+class {c model}Controller extends CoreAjaxController
+{
+    /**
+      *@var {c model}Services
+     */
+    private ${model}Services;
+
+    public function __construct({c model}Services ${model}Services)
+    {
+        $this->{model}Services = ${model}Services;
+
+    }
+
+    /**
+     * Create {c model}
+     * @param {c model}CreateRequest ${model}CreateRequest
+     * @return mixed
+     */
+    public function store({c model}CreateRequest ${model}CreateRequest) {
+        $created = $this->{model}Services->crud(${model}CreateRequest->all());
+        return $this->response($created);
+    }
+
+    /**
+     * Update {model}
+     * @param {c model}UpdateRequest ${model}UpdateRequest
+     * @param $id
+     * @return mixed
+     */
+    public function update({c model}UpdateRequest ${model}UpdateRequest,$id){
+        $updated = $this->{model}Services->crud(${model}UpdateRequest->all(), $id);
+        return $this->response($updated);
+    }
+
+    /**
+     * Delete {model}
+     * @return mixed
+     */
+    public function delete({c model}DeleteRequest ${model}DeleteRequest){
+        $deleted = $this->{model}Services->delete(${model}DeleteRequest->input('id'));
+        return $this->response($deleted);
+    }
+
+}
