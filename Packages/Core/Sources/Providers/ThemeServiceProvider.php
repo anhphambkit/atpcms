@@ -40,7 +40,7 @@ class ThemeServiceProvider extends ServiceProvider
      */
     private function inAdministration(int $segment = 1)
     {
-        return $this->app['request']->segment($segment) === config('atp-cms-settings.prefix-backend');
+        return $this->app['request']->segment($segment) === config('core.atp-cms-settings.prefix-backend');
     }
 
     /**

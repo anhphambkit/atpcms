@@ -20,6 +20,10 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespaceAdmin = 'Admin';
     protected $namespaceClient = 'Client';
 
+    protected $prefixWeb = '';
+    protected $prefixApi = 'api';
+    protected $prefixAjax = 'ajax';
+
     private $defaultWebRouteFile = 'web.php';
     private $defaultApiRouteFile = 'api.php';
     private $defaultAjaxRouteFile = 'ajax.php';
@@ -31,7 +35,6 @@ class RouteServiceProvider extends ServiceProvider
     private $defaultWebMiddlewareClass = 'WebMiddleware';
     private $defaultApiMiddlewareClass = 'ApiMiddleware';
     private $defaultAjaxMiddlewareClass = 'AjaxMiddleware';
-
 
     /**
      * The filters base class name.
@@ -65,10 +68,21 @@ class RouteServiceProvider extends ServiceProvider
         $coreServices = app()->make(CoreServices::class);
         $packages = $coreServices->listPackages();
         foreach($packages as $module){
-            $this->mapApiRoutes($module);
-            $this->mapAjaxRoutes($module);
-            $this->mapWebRoutes($module);
+            $this->registerRouteByNamespace($module, $this->namespaceAdmin, config('core.atp-cms-settings.prefix-backend'));
+            $this->registerRouteByNamespace($module, $this->namespaceClient);
+            $this->registerRouteByNamespace($module, $this->namespaceGeneral);
         }
+    }
+
+    /**
+     * @param $module
+     * @param $namespaceRoute
+     * @param $prefix
+     */
+    public function registerRouteByNamespace($module, $namespaceRoute, $prefix = "") {
+        $this->mapAjaxRoutes($module, $namespaceRoute, $prefix);
+        $this->mapApiRoutes($module, $namespaceRoute, $prefix);
+        $this->mapWebRoutes($module, $namespaceRoute, $prefix);
     }
 
     /**
@@ -88,38 +102,61 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
+     * @param $prefixPortal
+     * @param $prefixType
+     * @return string
+     */
+    public function generatePrefixRoute($prefixPortal, $prefixType) {
+        if (!empty($prefixPortal) && !empty($prefixType))
+            $prefixRoute = "{$prefixPortal}/{$prefixType}";
+        else if (!empty($prefixPortal))
+            $prefixRoute = "{$prefixPortal}";
+        else if (!empty($prefixType))
+            $prefixRoute = "{$prefixPortal}";
+        else
+            $prefixRoute = "";
+        return $prefixRoute;
+    }
+
+    /**
      * Mapping Web route from each Package
      * @param $moduleName
-     * @throws \Exception
+     * @param $namespace
+     * @param string $prefix
      */
-    protected function mapWebRoutes($moduleName)
+    protected function mapWebRoutes($moduleName, $namespace, $prefix = "")
     {
-        $route = Route::prefix('');
-        $this->mapMiddlewareAndNamespace($route, $moduleName, $this->defaultWebMiddlewareClass, $this->defaultWebControllerClass, $this->defaultWebRouteFile);
+        $prefixRoute = $this->generatePrefixRoute($prefix, $this->prefixWeb);
+        $route = Route::prefix("{$prefixRoute}");
+        $this->mapMiddlewareAndNamespace($route, $moduleName, $this->defaultWebMiddlewareClass, $namespace, $this->defaultWebControllerClass, $this->defaultWebRouteFile);
     }
 
     /**
      * Mapping API route from each Package
      * API must have KEY to communicate with server, that key will be matched with API_KEY in .env
      * @param $moduleName
-     * @throws \Exception
+     * @param $namespace
+     * @param string $prefix
      */
-    protected function mapApiRoutes($moduleName)
+    protected function mapApiRoutes($moduleName, $namespace, $prefix = "")
     {
-        $route = Route::prefix('api');
-        $this->mapMiddlewareAndNamespace($route, $moduleName, $this->defaultApiMiddlewareClass, $this->defaultApiControllerClass, $this->defaultApiRouteFile);
+        $prefixRoute = $this->generatePrefixRoute($prefix, $this->prefixApi);
+        $route = Route::prefix("{$prefixRoute}");
+        $this->mapMiddlewareAndNamespace($route, $moduleName, $this->defaultApiMiddlewareClass, $namespace, $this->defaultApiControllerClass, $this->defaultApiRouteFile);
     }
 
     /**
      * Mapping Ajax route from each Package
      * AJAX must stay in the same domain request without KEY like API
      * @param $moduleName
-     * @throws \Exception
+     * @param $namespace
+     * @param string $prefix
      */
-    private function mapAjaxRoutes($moduleName)
+    private function mapAjaxRoutes($moduleName, $namespace, $prefix = "")
     {
-        $route = Route::prefix(config('atp-cms-settings.ajax_prefix_route'));
-        $this->mapMiddlewareAndNamespace($route, $moduleName, $this->defaultAjaxMiddlewareClass, $this->defaultAjaxControllerClass, $this->defaultAjaxRouteFile);
+        $prefixRoute = $this->generatePrefixRoute($prefix, $this->prefixAjax);
+        $route = Route::prefix("{$prefixRoute}");
+        $this->mapMiddlewareAndNamespace($route, $moduleName, $this->defaultAjaxMiddlewareClass, $namespace, $this->defaultAjaxControllerClass, $this->defaultAjaxRouteFile);
     }
 
     /**
@@ -127,37 +164,24 @@ class RouteServiceProvider extends ServiceProvider
      * @param $route
      * @param $moduleName
      * @param $middlewareClass
+     * @param $namespaceRoute
      * @param $controllerNamespace
      * @param $defaultRouteFile
-     * @throws \Exception when not found middleware or controller
      */
-    private function mapMiddlewareAndNamespace(&$route, $moduleName, $middlewareClass, $controllerNamespace, $defaultRouteFile){
-        $generalRouteFile = base_path('Packages/'. $moduleName. '/Routes/'. $this->namespaceGeneral . '/' . $defaultRouteFile);
-        $adminRouteFile = base_path('Packages/'. $moduleName. '/Routes/'. $this->namespaceAdmin . '/' . $defaultRouteFile);
-        $clientRouteFile = base_path('Packages/'. $moduleName. '/Routes/'. $this->namespaceClient . '/' . $defaultRouteFile);
+    private function mapMiddlewareAndNamespace(&$route, $moduleName, $middlewareClass, $namespaceRoute, $controllerNamespace, $defaultRouteFile){
+        $routeFile = base_path('Packages/'. $moduleName. '/Routes/'. $namespaceRoute . '/' . $defaultRouteFile);
 
-        // Validate general route file
-        if(file_exists($generalRouteFile)) {
-            $this->registerRouteWithMiddleware($route, $moduleName, $middlewareClass, $this->namespaceGeneral, $controllerNamespace, $defaultRouteFile, $generalRouteFile);
+        // Validate route file
+        if(file_exists($routeFile)) {
+            $this->registerRouteWithMiddleware($route, $moduleName, $middlewareClass, $namespaceRoute, $controllerNamespace, $defaultRouteFile, $routeFile);
         }
 
-        // Validate admin route file
-        if(file_exists($adminRouteFile)) {
-            $this->registerRouteWithMiddleware($route, $moduleName, $middlewareClass, $this->namespaceAdmin, $controllerNamespace, $defaultRouteFile, $adminRouteFile);
-        }
-
-        // Validate client route file
-        if(file_exists($clientRouteFile)) {
-            $this->registerRouteWithMiddleware($route, $moduleName, $middlewareClass, $this->namespaceClient, $controllerNamespace, $defaultRouteFile, $clientRouteFile);
-        }
-
-        unset($generalRouteFile);
-        unset($adminRouteFile);
-        unset($clientRouteFile);
+        unset($routeFile);
         unset($moduleName);
         unset($middlewareClass);
         unset($controllerNamespace);
         unset($defaultRouteFile);
+        unset($namespaceRoute);
     }
 
     /**

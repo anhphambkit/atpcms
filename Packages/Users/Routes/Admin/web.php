@@ -11,6 +11,6 @@
  *                  ROUTE FOR DYNAMIC PORTAL MODULE
  *
  *********************************************************/
-Route::get('/backend/test', function () {
+Route::get('/test', function () {
     return "admin";
 });

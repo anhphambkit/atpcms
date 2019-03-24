@@ -2,6 +2,7 @@
 
 namespace Packages\Core\Sources\Providers;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Packages\Core\Sources\Services\CoreRoleServices;
@@ -41,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         $this->bindAssetClasses();
         $this->bindClass();
         $this->mapProviders();
-//        $this->mapConfigs();
+        $this->mapConfigs();
         $this->loadCommands();
         $this->loadTranslation();
         $this->registerPublish();
@@ -102,11 +103,16 @@ class AppServiceProvider extends ServiceProvider
      * Register all config each module
      */
     private function mapConfigs(){
-        $packages = $this->coreServices->listPackages();
-        foreach($packages as $module){
-            $configPath = $this->coreServices->packagePath($module). '/Config/'. mb_strtolower($module). '.php';
-            if(file_exists($configPath)){
-                $this->mergeConfigFrom($configPath, mb_strtolower($module));
+        $packages = $this->coreServices->listPackages(false);
+        foreach ($packages as $module) {
+
+            $configs = File::glob($this->coreServices->packagePath($module). '/Configs/*.php');
+
+            foreach ($configs as $config) {
+
+                $fileName = pathinfo($config, PATHINFO_FILENAME);
+
+                $this->mergeConfigFrom($config, mb_strtolower($module) . ".{$fileName}");
             }
         }
     }

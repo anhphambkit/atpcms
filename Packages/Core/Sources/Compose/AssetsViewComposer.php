@@ -58,7 +58,7 @@ class AssetsViewComposer
      */
     private function onBackend(int $indexSegment = 1)
     {
-        if (app(Request::class)->segment($indexSegment) === config('atp-cms-settings.prefix-backend')) {
+        if (app(Request::class)->segment($indexSegment) === config('core.atp-cms-settings.prefix-backend')) {
             return true;
         }
 
